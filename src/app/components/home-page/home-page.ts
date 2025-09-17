@@ -1,4 +1,4 @@
-import {Component, inject, signal, computed, effect} from '@angular/core';
+import {Component, inject, signal, computed, effect, input} from '@angular/core';
 import {CardComponent} from '../../shared/card-component/card.component';
 import {PictureApi} from '../../services/picture-api';
 import {environment} from '../../../environments/environment.development';
@@ -17,8 +17,24 @@ export class HomePage {
   private readonly router = inject(Router);
   protected readonly pictureApi = inject(PictureApi);
 
+  protected readonly authorId = input<string>('');
   protected readonly currentPage = signal(1);
-  protected readonly picturePage = this.pictureApi.getPageOfPictures(this.currentPage);
+
+  // We create two possible ways to obtain images depending on whether the author's ID is available or not.
+  private readonly allPicturesResource = this.pictureApi.getPageOfPictures(this.currentPage);
+  private readonly authorPicturesResource = this.pictureApi.getPageOfPicturesByAuthor(
+    this.authorId,
+    this.currentPage
+  );
+  protected readonly picturePage = computed(() => {
+    const authorIdValue = this.authorId();
+    if (authorIdValue && authorIdValue !== '') {
+      return this.authorPicturesResource;
+    } else {
+      return this.allPicturesResource;
+    }
+  });
+
 
   protected readonly environment = environment;
 
@@ -40,7 +56,7 @@ export class HomePage {
 
     // Validate page boundaries after data loading
     effect(() => {
-      const pageData = this.picturePage.value();
+      const pageData = this.picturePage().value();
       if (pageData && this.currentPage() > pageData.totalPages && pageData.totalPages > 0) {
         this.navigateToPage(pageData.totalPages);
       }
@@ -56,21 +72,21 @@ export class HomePage {
   }
 
   protected goToPreviousPage(): void {
-    const pageData = this.picturePage.value();
+    const pageData = this.picturePage().value();
     if (pageData && !pageData.first) {
       this.navigateToPage(this.currentPage() - 1);
     }
   }
 
   protected goToNextPage(): void {
-    const pageData = this.picturePage.value();
+    const pageData = this.picturePage().value();
     if (pageData && !pageData.last) {
       this.navigateToPage(this.currentPage() + 1);
     }
   }
 
   protected getPageNumbers(): number[] {
-    const pageData = this.picturePage.value();
+    const pageData = this.picturePage().value();
     if (!pageData) return [];
 
     const totalPages = pageData.totalPages;

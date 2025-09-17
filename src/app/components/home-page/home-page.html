@@ -1,7 +1,11 @@
-<h1 class="text-center">Welcome to our Picture App</h1>
+@if(authorId() === '') {
+  <h1 class="text-center">Welcome to our Picture App</h1>
+} @else {
+  <h1 class="text-center">Pictures of {{ authorId() }}</h1>
+}
 
 <div class="p-3">
-  @if (picturePage.isLoading()) {
+  @if (picturePage().isLoading()) {
     <div class="card" aria-hidden="true">
       <img src="#" class="card-img-top" alt="...">
       <div class="card-body">
@@ -19,11 +23,11 @@
       </div>
     </div>
   } @else {
-    @if (!picturePage.hasValue()) {
+    @if (!picturePage().hasValue()) {
       <p>No pictures found.</p>
     } @else {
       <div class="row g-4">
-        @for (picture of picturePage.value().content; track $index) {
+        @for (picture of picturePage().value()?.content; track $index) {
           <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
             <app-card-component [title]="picture.title"
                                 [authorName]="picture.author.displayName"
@@ -39,12 +43,12 @@
     }
   }
 
-<!--  PAGINATION -->
-  @if (picturePage.hasValue() && picturePage.value()!.totalPages > 1) {
+  <!-- PAGINATION -->
+  @if (picturePage().hasValue() && picturePage().value()!.totalPages > 1) {
     <nav aria-label="Page navigation" class="mt-4">
       <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="picturePage.value()!.first">
-          <button class="page-link" (click)="goToPreviousPage()" [disabled]="picturePage.value()!.first">
+        <li class="page-item" [class.disabled]="picturePage().value()!.first">
+          <button class="page-link" (click)="goToPreviousPage()" [disabled]="picturePage().value()!.first">
             Previous
           </button>
         </li>
@@ -57,8 +61,8 @@
           </li>
         }
 
-        <li class="page-item" [class.disabled]="picturePage.value()!.last">
-          <button class="page-link" (click)="goToNextPage()" [disabled]="picturePage.value()!.last">
+        <li class="page-item" [class.disabled]="picturePage().value()!.last">
+          <button class="page-link" (click)="goToNextPage()" [disabled]="picturePage().value()!.last">
             Next
           </button>
         </li>

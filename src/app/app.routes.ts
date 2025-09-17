@@ -5,5 +5,5 @@ import {PictureDetails} from './components/picture-details/picture-details';
 export const routes: Routes = [
   {path: '', component: HomePage},
   {path: 'picture/:id', component: PictureDetails},
-  {path: 'author/:id', component: HomePage},
+  {path: 'author/:authorId', component: HomePage},
 ];
