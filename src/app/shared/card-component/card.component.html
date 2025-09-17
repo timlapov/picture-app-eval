@@ -1,0 +1,38 @@
+<div class="card" style="width: 18rem;">
+  @if (image()) {
+    <img [src]="image()!" class="card-img-top" [alt]="title() || 'Card image'">
+  }
+  <div class="card-body">
+    @if (title()) {
+      <h5 class="card-title">{{ title() }}</h5>
+    }
+    @if (authorName() || date()) {
+      <div class="card-meta text-muted small mb-2">
+        @if (authorName()) {
+          <span class="author">By
+            @if (authorLink()) {
+              <a [href]="authorLink()" class="text-decoration-none text-muted">{{ authorName() }}</a>
+            } @else {
+              {{ authorName() }}
+            }
+          </span>
+        }
+        @if (authorName() && date()) {
+          <span> • </span>
+        }
+        @if (date()) {
+          <span class="date">{{ date() | date:'d MMM y, h:mm a' }}</span>
+        }
+      </div>
+    }
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="likes-counter">
+        <span class="heart me-1" style="color: red;">♥</span>
+        <span>{{likes()}}</span>
+      </div>
+      @if (link()) {
+        <a [href]="link()" class="btn btn-dark btn-sm">More details</a>
+      }
+    </div>
+  </div>
+</div>

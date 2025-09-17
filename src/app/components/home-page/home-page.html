@@ -1,0 +1,68 @@
+<h1 class="text-center">Welcome to our Picture App</h1>
+
+<div class="p-3">
+  @if (picturePage.isLoading()) {
+    <div class="card" aria-hidden="true">
+      <img src="#" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title placeholder-glow">
+          <span class="placeholder col-6"></span>
+        </h5>
+        <p class="card-text placeholder-glow">
+          <span class="placeholder col-7"></span>
+          <span class="placeholder col-4"></span>
+          <span class="placeholder col-4"></span>
+          <span class="placeholder col-6"></span>
+          <span class="placeholder col-8"></span>
+        </p>
+        <a class="btn btn-dark disabled placeholder col-6" aria-disabled="true"></a>
+      </div>
+    </div>
+  } @else {
+    @if (!picturePage.hasValue()) {
+      <p>No pictures found.</p>
+    } @else {
+      <div class="row g-4">
+        @for (picture of picturePage.value().content; track $index) {
+          <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <app-card-component [title]="picture.title"
+                                [authorName]="picture.author.displayName"
+                                [authorLink]="environment.frontUrl + '/author/' + picture.author.id"
+                                [date]="picture.createdAt"
+                                [image]="picture.image"
+                                [link]="environment.frontUrl + '/picture/' + picture.id"
+                                [likes]="picture.likes.length">
+            </app-card-component>
+          </div>
+        }
+      </div>
+    }
+  }
+
+<!--  PAGINATION -->
+  @if (picturePage.hasValue() && picturePage.value()!.totalPages > 1) {
+    <nav aria-label="Page navigation" class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="picturePage.value()!.first">
+          <button class="page-link" (click)="goToPreviousPage()" [disabled]="picturePage.value()!.first">
+            Previous
+          </button>
+        </li>
+
+        @for (pageNum of getPageNumbers(); track pageNum) {
+          <li class="page-item" [class.active]="pageNum === currentPage()">
+            <button class="page-link" (click)="navigateToPage(pageNum)">
+              {{ pageNum }}
+            </button>
+          </li>
+        }
+
+        <li class="page-item" [class.disabled]="picturePage.value()!.last">
+          <button class="page-link" (click)="goToNextPage()" [disabled]="picturePage.value()!.last">
+            Next
+          </button>
+        </li>
+      </ul>
+    </nav>
+  }
+</div>
