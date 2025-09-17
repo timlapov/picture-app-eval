@@ -1,1 +1,119 @@
-<p>register-page works!</p>
+<div class="container m-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="card-title text-center mb-4">Register</h2>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Email field -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [class.is-invalid]="form.controls.email.invalid && form.controls.email.touched"
+                id="email"
+                formControlName="email"
+                placeholder="Enter your email">
+              @if (form.controls.email.invalid && form.controls.email.touched) {
+                <div class="invalid-feedback">
+                  @if (form.controls.email.errors?.['required']) {
+                    Email is required
+                  }
+                  @if (form.controls.email.errors?.['email']) {
+                    Please enter a valid email
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Display Name field -->
+            <div class="mb-3">
+              <label for="displayName" class="form-label">Display Name</label>
+              <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="form.controls.displayName.invalid && form.controls.displayName.touched"
+                id="displayName"
+                formControlName="displayName"
+                placeholder="Enter your display name">
+              @if (form.controls.displayName.invalid && form.controls.displayName.touched) {
+                <div class="invalid-feedback">
+                  Display name is required
+                </div>
+              }
+            </div>
+
+            <!-- Password field -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [class.is-invalid]="form.controls.password.invalid && form.controls.password.touched"
+                id="password"
+                formControlName="password"
+                placeholder="Enter your password">
+              @if (form.controls.password.invalid && form.controls.password.touched) {
+                <div class="invalid-feedback">
+                  @if (form.controls.password.errors?.['required']) {
+                    Password is required
+                  }
+                  @if (form.controls.password.errors?.['minlength']) {
+                    Password must be at least 4 characters
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Confirm Password field -->
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [class.is-invalid]="(form.controls.confirmPassword.invalid || form.errors?.['passwordsMismatch']) && form.controls.confirmPassword.touched"
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                placeholder="Confirm your password">
+              @if (form.controls.confirmPassword.invalid && form.controls.confirmPassword.touched) {
+                <div class="invalid-feedback">
+                  @if (form.controls.confirmPassword.errors?.['required']) {
+                    Please confirm your password
+                  }
+                  @if (form.controls.confirmPassword.errors?.['minlength']) {
+                    Password must be at least 4 characters
+                  }
+                </div>
+              }
+              @if (form.errors?.['passwordsMismatch'] && form.controls.confirmPassword.touched) {
+                <div class="invalid-feedback d-block">
+                  Passwords do not match
+                </div>
+              }
+            </div>
+
+            <!-- Submit button -->
+            <div class="d-grid">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="form.invalid">
+                Register
+              </button>
+            </div>
+          </form>
+
+          <!-- Login link -->
+          <div class="text-center mt-3">
+            <p class="text-muted">
+              Already have an account?
+              <a href="/login" class="text-decoration-none">Login</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,11 @@
 @if(authorId() === '') {
-  <h1 class="text-center">Welcome to our Picture App</h1>
+  <h1 class="text-center mt-2">Welcome to our Picture App</h1>
 } @else {
-  <h1 class="text-center">Pictures of {{ authorId() }}</h1>
+  @if (picturePage().value()?.content && picturePage().value()!.content.length > 0) {
+    <h1 class="text-center mt-2">Pictures of {{ picturePage().value()!.content[0].author.displayName }}</h1>
+  } @else {
+    <h1 class="text-center mt-2">Pictures</h1>
+  }
 }
 
 <div class="p-3">
