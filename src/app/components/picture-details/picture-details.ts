@@ -47,21 +47,6 @@ export class PictureDetails {
 
     this.isLiking.set(true);
 
-    // First verify authentication with server before proceeding
-    this.authApi.checkAuthStatus().subscribe({
-      next: () => {
-        this.proceedWithLike(pictureId);
-      },
-      error: () => {
-        this.isLiking.set(false);
-        // Clear invalid session data
-        localStorage.removeItem('user');
-        this.authApi.user.set(null);
-      }
-    });
-  }
-
-  private proceedWithLike(pictureId: string) {
     this.pictureApi.toggleLike(pictureId).subscribe({
       next: () => {
         // Update the picture resource with the new data
@@ -85,21 +70,6 @@ export class PictureDetails {
 
     this.isAddingComment.set(true);
 
-    // First verify authentication with server before proceeding
-    this.authApi.checkAuthStatus().subscribe({
-      next: () => {
-        this.proceedWithComment(pictureId, content);
-      },
-      error: () => {
-        this.isAddingComment.set(false);
-        // Clear invalid session data
-        localStorage.removeItem('user');
-        this.authApi.user.set(null);
-      }
-    });
-  }
-
-  private proceedWithComment(pictureId: string, content: string) {
     const commentData = {
       content,
       picture: {

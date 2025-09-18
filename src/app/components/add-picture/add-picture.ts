@@ -54,28 +54,7 @@ export class AddPicture {
     this.isSubmitting.set(true);
     this.isUploading.set(true);
 
-    // Verify authentication with server before proceeding
-    this.authApi.checkAuthStatus().subscribe({
-      next: () => {
-        this.proceedWithUpload();
-      },
-      error: () => {
-        this.isSubmitting.set(false);
-        this.isUploading.set(false);
-
-        // Clear invalid session data
-        localStorage.removeItem('user');
-        this.authApi.user.set(null);
-
-        this.addToast('error', 'Your session has expired. Please log in again.');
-        this.authApi.logout();
-        void this.router.navigate(['/login']);
-      }
-    });
-  }
-
-  private proceedWithUpload() {
-
+    // Step 1: Upload the file
     this.pictureApi.upload(this.selectedFile!).subscribe({
       next: (uploadResponse) => {
         this.isUploading.set(false);
