@@ -34,8 +34,14 @@ export class PictureApi {
   getPageOfPicturesByAuthor(authorId: Signal<string>, page: Signal<number | undefined>) {
     return httpResource<Page<Picture>>(
       () => {
+        const authorIdValue = authorId();
         const pageNumber = page() ?? 1;
-        return environment.apiUrl + `/api/picture/user/${authorId()}?pageNumber=${pageNumber - 1}`;
+
+        if (!authorIdValue || authorIdValue === '') {
+          return undefined;
+        }
+
+        return environment.apiUrl + `/api/picture/user/${authorIdValue}?pageNumber=${pageNumber - 1}`;
       }
     );
   }
