@@ -50,4 +50,8 @@ export class PictureApi {
     return this.httpClient.post<Picture>(environment.apiUrl + `/api/picture`, picture);
   }
 
+  toggleLike(pictureId: string) {
+    return this.httpClient.patch<Picture>(environment.apiUrl + `/api/picture/${pictureId}/like`, {});
+  }
+
 }

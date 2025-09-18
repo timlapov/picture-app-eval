@@ -47,11 +47,25 @@
 
                 <!-- Like Button and Count -->
                 <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                  <button class="btn btn-outline-danger d-flex align-items-center"
-                          (click)="toggleLike()">
-                    <span class="me-2">♥</span>
-                    Like
-                  </button>
+                  @if (currentUser()) {
+                    <button [class]="isLikedByCurrentUser() ? 'btn btn-danger d-flex align-items-center' : 'btn btn-outline-danger d-flex align-items-center'"
+                            (click)="toggleLike()"
+                            [disabled]="isLiking()">
+                      @if (isLiking()) {
+                        <span class="spinner-border spinner-border-sm me-2" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </span>
+                      } @else {
+                        <span class="me-2">♥</span>
+                      }
+                      {{ isLikedByCurrentUser() ? 'Unlike' : 'Like' }}
+                    </button>
+                  } @else {
+                    <button class="btn btn-outline-secondary d-flex align-items-center" disabled>
+                      <span class="me-2">♥</span>
+                      Login to like
+                    </button>
+                  }
                   <span class="text-muted">
                     <strong>{{ picture.value().likes.length }}</strong> likes
                   </span>
