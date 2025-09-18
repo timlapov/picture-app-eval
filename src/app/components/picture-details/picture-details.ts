@@ -1,13 +1,14 @@
 import {Component, computed, inject, input, signal} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {DatePipe} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {PictureApi} from '../../services/picture-api';
 import {CommentApi} from '../../services/comment-api';
 import {AuthenticationApi} from '../../authentication/authentication-api';
 
 @Component({
   selector: 'app-picture-details',
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule],
   templateUrl: './picture-details.html',
   styleUrl: './picture-details.css'
 })
@@ -22,6 +23,8 @@ export class PictureDetails {
   protected readonly comments = this.commentApi.getCommentsForPicture(this.id);
 
   protected readonly isLiking = signal(false);
+  protected readonly isAddingComment = signal(false);
+  protected readonly commentText = signal('');
 
   protected readonly currentUser = computed(() => this.authApi.user());
 
@@ -67,6 +70,52 @@ export class PictureDetails {
       },
       error: () => {
         this.isLiking.set(false);
+      }
+    });
+  }
+
+  addComment() {
+    const pictureId = this.id();
+    const currentUser = this.currentUser();
+    const content = this.commentText().trim();
+
+    if (!pictureId || !currentUser || !content || this.isAddingComment()) {
+      return;
+    }
+
+    this.isAddingComment.set(true);
+
+    // First verify authentication with server before proceeding
+    this.authApi.checkAuthStatus().subscribe({
+      next: () => {
+        this.proceedWithComment(pictureId, content);
+      },
+      error: () => {
+        this.isAddingComment.set(false);
+        // Clear invalid session data
+        localStorage.removeItem('user');
+        this.authApi.user.set(null);
+      }
+    });
+  }
+
+  private proceedWithComment(pictureId: string, content: string) {
+    const commentData = {
+      content,
+      picture: {
+        id: parseInt(pictureId, 10)
+      }
+    };
+
+    this.commentApi.addComment(commentData).subscribe({
+      next: () => {
+        // Clear the input and reload comments
+        this.commentText.set('');
+        this.comments.reload();
+        this.isAddingComment.set(false);
+      },
+      error: () => {
+        this.isAddingComment.set(false);
       }
     });
   }
