@@ -1,1 +1,92 @@
-<p>add-picture works!</p>
+<div class="container m-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="card-title text-center mb-4">Add New Picture</h2>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Title field -->
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="form.controls.title.invalid && form.controls.title.touched"
+                id="title"
+                formControlName="title"
+                placeholder="Enter picture title">
+              @if (form.controls.title.invalid && form.controls.title.touched) {
+                <div class="invalid-feedback">
+                  Title is required
+                </div>
+              }
+            </div>
+
+            <!-- Description field -->
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea
+                class="form-control"
+                [class.is-invalid]="form.controls.description.invalid && form.controls.description.touched"
+                id="description"
+                formControlName="description"
+                rows="3"
+                placeholder="Enter picture description"></textarea>
+              @if (form.controls.description.invalid && form.controls.description.touched) {
+                <div class="invalid-feedback">
+                  Description is required
+                </div>
+              }
+            </div>
+
+            <!-- Image upload field -->
+            <div class="mb-3">
+              <label for="image" class="form-label">Image</label>
+              <input
+                type="file"
+                class="form-control"
+                [class.is-invalid]="!fileSelected() && form.touched"
+                id="image"
+                accept="image/*"
+                (change)="onFileSelected($event)">
+            </div>
+
+
+            <!-- Upload progress -->
+            @if (isUploading()) {
+              <div class="mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                  <span>Uploading image...</span>
+                </div>
+              </div>
+            }
+
+            <!-- Submit button -->
+            <div class="d-grid">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="form.invalid || isUploading() || isSubmitting()">
+                @if (isSubmitting()) {
+                  <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  Publishing...
+                } @else {
+                  Publish Picture
+                }
+              </button>
+            </div>
+          </form>
+
+          <!-- Back to home link -->
+          <div class="text-center mt-3">
+            <p class="text-muted">
+              <a href="/" class="text-decoration-none">Back to Home</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

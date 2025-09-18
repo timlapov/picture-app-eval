@@ -14,7 +14,7 @@ interface UserResponseDTO {
   email: string;
   displayName: string;
   role: string;
-  ena: boolean;
+  enabled: boolean;
 }
 
 @Injectable({
@@ -47,11 +47,8 @@ export class AuthenticationApi {
       withCredentials: true
     }).pipe(
       tap(response => {
-        console.log('Response from server:', response);
         localStorage.setItem('user', JSON.stringify(response));
         this.user.set(response);
-        console.log('User saved to localStorage');
-
       })
     );
   }
@@ -66,6 +63,12 @@ export class AuthenticationApi {
         this.user.set(null);
       })
     );
+  }
+
+  checkAuthStatus() {
+    return this.httpClient.get<UserResponseDTO>(environment.apiUrl + '/api/account', {
+      withCredentials: true
+    });
   }
 
 }

@@ -5,6 +5,7 @@ import {RegisterPage} from './components/register-page/register-page';
 import {LoginPage} from './components/login-page/login-page';
 import {AddPicture} from './components/add-picture/add-picture';
 import {authGuard} from './guards/auth-guard';
+import {ProfilePage} from './components/profile-page/profile-page';
 
 export const routes: Routes = [
   {path: '', component: HomePage},
@@ -13,4 +14,5 @@ export const routes: Routes = [
   {path: 'register', component: RegisterPage},
   {path: 'login', component: LoginPage},
   {path: 'add-picture', component: AddPicture, canActivate: [authGuard]},
+  {path: 'profile', component: ProfilePage, canActivate: [authGuard]},
 ];

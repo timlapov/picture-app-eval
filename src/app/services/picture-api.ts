@@ -2,10 +2,19 @@ import {inject, Injectable, Signal} from '@angular/core';
 import {HttpClient, httpResource} from '@angular/common/http';
 import {environment} from '../../environments/environment.development';
 
+interface PictureAddDTO {
+  title: string;
+  description: string;
+  image: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PictureApi {
+
+  private httpClient = inject(HttpClient);
+
   getPageOfPictures(page: Signal<number | undefined>) {
     return httpResource<Page<Picture>>(
       () => {
@@ -30,4 +39,15 @@ export class PictureApi {
       }
     );
   }
+
+  upload(image: File) {
+    const formData = new FormData();
+    formData.append('image', image);
+    return this.httpClient.post<{filename: string}>(environment.apiUrl + `/api/picture/upload`, formData);
+  }
+
+  addPicture(picture: PictureAddDTO) {
+    return this.httpClient.post<Picture>(environment.apiUrl + `/api/picture`, picture);
+  }
+
 }

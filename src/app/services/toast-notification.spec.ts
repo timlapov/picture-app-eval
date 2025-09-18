@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UserApi } from './user-api';
+import { ToastNotification } from './toast-notification';
 
-describe('UserApi', () => {
-  let service: UserApi;
+describe('ToastNotification', () => {
+  let service: ToastNotification;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UserApi);
+    service = TestBed.inject(ToastNotification);
   });
 
   it('should be created', () => {
