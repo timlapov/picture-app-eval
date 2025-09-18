@@ -1,6 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {AuthenticationApi} from '../../authentication/authentication-api';
 import {AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register-page',
@@ -11,6 +12,7 @@ import {AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, Validation
 export class RegisterPage {
   private readonly authenticationApi = inject(AuthenticationApi);
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly router = inject(Router);
 
   private passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password')?.value;
@@ -32,7 +34,7 @@ export class RegisterPage {
     const {email, displayName, password} =  this.form.getRawValue();
     this.authenticationApi.register({email, displayName, password}).subscribe({
       next: () => {
-        console.log('success');
+        this.router.navigate(['/login']);
       },
       error: (error) => {
         console.log('error', error);

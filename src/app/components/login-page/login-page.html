@@ -1,1 +1,75 @@
-<p>login-page works!</p>
+<div class="container m-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="card-title text-center mb-4">Login</h2>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Email field -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [class.is-invalid]="form.controls.email.invalid && form.controls.email.touched"
+                id="email"
+                formControlName="email"
+                placeholder="Enter your email">
+              @if (form.controls.email.invalid && form.controls.email.touched) {
+                <div class="invalid-feedback">
+                  @if (form.controls.email.errors?.['required']) {
+                    Email is required
+                  }
+                  @if (form.controls.email.errors?.['email']) {
+                    Please enter a valid email
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Password field -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [class.is-invalid]="form.controls.password.invalid && form.controls.password.touched"
+                id="password"
+                formControlName="password"
+                placeholder="Enter your password">
+              @if (form.controls.password.invalid && form.controls.password.touched) {
+                <div class="invalid-feedback">
+                  @if (form.controls.password.errors?.['required']) {
+                    Password is required
+                  }
+                  @if (form.controls.password.errors?.['minlength']) {
+                    Password must be at least 4 characters
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Submit button -->
+            <div class="d-grid">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="form.invalid">
+                Login
+              </button>
+            </div>
+          </form>
+
+          <!-- Register link -->
+          <div class="text-center mt-3">
+            <p class="text-muted">
+              Don't have an account?
+              <a href="/register" class="text-decoration-none">Register</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

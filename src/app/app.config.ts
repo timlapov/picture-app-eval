@@ -3,16 +3,13 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import {provideHttpClient, withFetch, withInterceptors} from '@angular/common/http';
-
-function globalInterceptor() {
-
-}
+import {globalInterceptor} from './interceptors/global-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(withFetch(), withInterceptors([]))
+    provideHttpClient(withFetch(), withInterceptors([globalInterceptor]))
   ]
 };
