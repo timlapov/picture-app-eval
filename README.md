@@ -32,7 +32,7 @@ This is a learning project created as part of an Angular course. The backend is 
 
 1. **Clone the repository**
    ```bash
-   git clone [<repository-url>](https://github.com/timlapov/picture-app-eval.git)
+   git clone https://github.com/timlapov/picture-app-eval.git
    cd picture-app-eval
    ```
 
